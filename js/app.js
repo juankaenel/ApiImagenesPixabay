@@ -44,7 +44,7 @@ function mostrarAlerta(mensaje) {
 
 }
 
-function buscarImagenes() {
+async function buscarImagenes() {
     //Para poder hacer peticiones a la api debes tener una api key, primeramente debes registrarte en pixabay. -> https://pixabay.com/api/docs/
 
     const termino = document.querySelector('#termino').value;
@@ -57,7 +57,7 @@ function buscarImagenes() {
 
     const key = '18789396-cb425b960b98f7fb93d8a42a0';
     const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`; //con &per_page=100 nos va a traer 100 por cada consulta
-    fetch(url)
+  /*   fetch(url)
         .then(respuesta => respuesta.json())
         .then(resultado => {
             if (resultado.total===0){
@@ -66,9 +66,23 @@ function buscarImagenes() {
             }
             totalPaginas = calcularPaginas(resultado.totalHits); //totalHits contiene la cantidad de páginas que trae esa consulta
             //console.log(totalPaginas); //numero de imágenes por página
-            mostrarImagenes(resultado.hits);
+            mostrarImagenes(resultado.hits); 
 
-        });
+        });*/
+
+    try {
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json(); 
+        if (resultado.total===0){
+            mostrarAlerta('No existe ninguna imágen con éste término de búsqueda')
+        }
+        totalPaginas = calcularPaginas(resultado.totalHits); //totalHits contiene la cantidad de páginas que trae esa consulta
+        //console.log(totalPaginas); //numero de imágenes por página
+        mostrarImagenes(resultado.hits);
+    } catch (error) {
+        console.log(error);
+    }
+        
 }
 
 
